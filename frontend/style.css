@@ -175,6 +175,7 @@ header p {
 .actions {
     display: flex;
     gap: 15px;
+    justify-content:center;
 }
 
 /* 结果区域样式 */

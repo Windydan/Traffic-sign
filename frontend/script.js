@@ -380,4 +380,4 @@ function initDemo() {
 }
 
 // 初始化页面
-initDemo();
+//initDemo();
