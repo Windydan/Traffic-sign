@@ -106,50 +106,90 @@ function clearBoundingBoxes() {
 
 // 创建边界框
 function createBoundingBox(result, imgWidth, imgHeight) {
-    // 计算边界框位置
+    // 获取图片和容器的实际显示尺寸
+    const displayWidth = previewImg.getBoundingClientRect().width;
+    const displayHeight = previewImg.getBoundingClientRect().height;
+    const containerWidth = imagePreview.clientWidth;
+    const containerHeight = imagePreview.clientHeight;
+
+    // 计算图片在容器中的内边距（居中留白）
+    const paddingLeft = (containerWidth - displayWidth) / 2;
+    const paddingTop = (containerHeight - displayHeight) / 2;
+
+    // 计算缩放比例
+    const scaleX = displayWidth / imgWidth;
+    const scaleY = displayHeight / imgHeight;
+
+    // 原始bbox
     const [x1, y1, x2, y2] = result.bbox;
-    const width = x2 - x1;
-    const height = y2 - y1;
-    
+
+    // 按比例缩放并加上内边距
+    const left = x1 * scaleX + paddingLeft;
+    const top = y1 * scaleY + paddingTop;
+    const width = (x2 - x1) * scaleX;
+    const height = (y2 - y1) * scaleY;
+
     // 创建边界框元素
     const box = document.createElement('div');
     box.className = 'bounding-box';
-    box.style.left = `${x1}px`;
-    box.style.top = `${y1}px`;
+    box.style.left = `${left}px`;
+    box.style.top = `${top}px`;
     box.style.width = `${width}px`;
     box.style.height = `${height}px`;
-    
+    box.style.display = 'block';
+
     // 随机颜色
     const colors = ['#4361ee', '#06d6a0', '#ef476f', '#ffd166', '#118ab2'];
     const color = colors[Math.floor(Math.random() * colors.length)];
     box.style.borderColor = color;
-    
+
     // 创建标签
     const label = document.createElement('div');
     label.className = 'bounding-label';
     label.textContent = `${result.label} (${(result.confidence * 100).toFixed(1)}%)`;
-    label.style.left = `${x1}px`;
-    label.style.top = `${y1}px`;
+    label.style.left = `${left}px`;
+    label.style.top = `${top}px`;
     label.style.backgroundColor = color;
-    
+
     // 添加鼠标事件
+    function setActiveZIndex(active) {
+        const z = active ? 999 : 10;
+        const labelZ = active ? 999 : 11;
+        box.style.zIndex = z;
+        label.style.zIndex = labelZ;
+    }
+
     box.addEventListener('mouseenter', () => {
         box.style.borderWidth = '4px';
         label.style.fontSize = '14px';
+        setActiveZIndex(true);
     });
-    
+
     box.addEventListener('mouseleave', () => {
         box.style.borderWidth = '3px';
         label.style.fontSize = '12px';
+        setActiveZIndex(false);
     });
-    
+
+    label.addEventListener('mouseenter', () => {
+        box.style.borderWidth = '4px';
+        label.style.fontSize = '14px';
+        setActiveZIndex(true);
+    });
+
+    label.addEventListener('mouseleave', () => {
+        box.style.borderWidth = '3px';
+        label.style.fontSize = '12px';
+        setActiveZIndex(false);
+    });
+
     // 添加到容器
     imagePreview.appendChild(box);
     imagePreview.appendChild(label);
-    
+
     // 存储引用
     boundingBoxes.push(box, label);
-    
+
     return box;
 }
 

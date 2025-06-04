@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 
-img_path = 'dataset/tt100k_yolo/images/6071.jpg'
+img_path = 'dataset/tt100k_yolo/images/73.jpg'
 yolo = YOLO('runs/detect/train/weights/best.pt') #看你要用best or last
 yolo(img_path ,show = True,save = True)
 
