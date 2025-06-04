@@ -1,0 +1,4 @@
+Flask
+numpy
+opencv-python
+pytorch #实际运行框架

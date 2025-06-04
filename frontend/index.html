@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交通标志识别系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>交通标志识别系统</h1>
+            <p>上传图片识别多个交通标志，支持边界框显示</p>
+        </header>
+        
+        <div class="app-container">
+            <div class="upload-section">
+                <div class="section-title">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h2>上传交通标志图片</h2>
+                </div>
+                
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-image"></i>
+                    </div>
+                    <h3>拖放图片到此处或点击上传</h3>
+                    <p>支持 JPG, PNG 格式，图片大小不超过 5MB</p>
+                    <button class="btn" id="selectBtn">选择文件</button>
+                    <input type="file" id="fileInput" class="file-input" accept="image/*">
+                </div>
+                
+                <div class="file-info" id="fileInfo">
+                    <p>已选择文件: <span id="fileName">未选择文件</span></p>
+                    <p>文件大小: <span id="fileSize">-</span></p>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-upload" id="uploadBtn">
+                        <i class="fas fa-upload"></i> 上传图片
+                    </button>
+                    <button class="btn" id="resetBtn" style="background: #f1f5f9; color: var(--dark);">
+                        <i class="fas fa-redo"></i> 重新选择
+                    </button>
+                </div>
+            </div>
+            
+            <div class="result-section">
+                <div class="section-title">
+                    <i class="fas fa-search"></i>
+                    <h2>识别结果</h2>
+                </div>
+                
+                <div class="result-content">
+                    <div class="image-container">
+                        <div class="image-preview" id="imagePreview">
+                            <div class="placeholder">
+                                <i class="fas fa-image"></i>
+                                <p>图片预览区域</p>
+                            </div>
+                            <img id="previewImg" src="" alt="Preview">
+                        </div>
+                    </div>
+                    
+                    <div class="status">
+                        <i class="fas fa-clock"></i>
+                        <span>识别状态: <span id="statusText">等待上传</span></span>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress" id="progressBar"></div>
+                    </div>
+                    
+                    <div class="recognition-results">
+                        <div class="results-header">
+                            <div class="results-title">识别到的交通标志</div>
+                            <div class="results-count" id="resultsCount">0 个</div>
+                        </div>
+                        <div class="results-grid" id="resultsGrid">
+                            <!-- 结果卡片将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        <i class="fas fa-check-circle"></i> <span id="successText">识别成功！共找到 <span id="signCount">0</span> 个交通标志</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
