@@ -209,7 +209,7 @@ function displayResults(results) {
                 <div class="sign-label">${result.label}</div>
                 <div class="confidence">${(result.confidence * 100).toFixed(1)}%</div>
             </div>
-            <div class="sign-description">${result.description}</div>
+
             <div class="coordinates">
                 <div class="coord">x1: ${result.bbox[0]}</div>
                 <div class="coord">y1: ${result.bbox[1]}</div>

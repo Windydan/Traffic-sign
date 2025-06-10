@@ -1,11 +1,18 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from ultralytics import YOLO
+import yaml
 
 app = Flask(__name__)
 CORS(app)  # 允许跨域请求
 
-yolo = YOLO('runs/detect/train/weights/best.pt')
+# 加载YOLO模型
+yolo = YOLO('runs/detect/train/weights/last.pt')
+
+# 加载类别名称映射
+with open('dataset/tt100k_yolo/tt100k.yaml', 'r', encoding='utf-8') as f:
+    yaml_data = yaml.safe_load(f)
+    class_names = yaml_data['names']
 
 @app.route('/api/detect', methods=['POST'])
 def detect():
@@ -29,13 +36,15 @@ def detect():
         boxes = result.boxes.xyxy.cpu().numpy()  # 边界框坐标
         scores = result.boxes.conf.cpu().numpy()  # 置信度
         classes = result.boxes.cls.cpu().numpy()  # 类别索引
-        class_names = [yolo.names[int(cls)] for cls in classes]
-        for (box, score, class_name) in zip(boxes, scores, class_names):
+        for (box, score, cls) in zip(boxes, scores, classes):
+            class_id = int(cls)
+            class_name = yolo.names[class_id]
+            description = class_names.get(class_id, class_name)
             detections.append({
-                "label": class_name,  # 例如 “PIL001EQ”
-                "description": "交通标志描述（可自定义）",  # 可自定义或从字典映射
+                "label": class_name,
+                "description": description,
                 "confidence": float(score),
-                "bbox": [int(x) for x in box]  # 转为整数，前端需要
+                "bbox": [int(x) for x in box]
             })
     
 
